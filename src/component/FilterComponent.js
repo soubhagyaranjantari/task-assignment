@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Switch from "@mui/material/Switch";
 import "./FilterComponent.css";
-import data from '../data/data.json'
+import data from '../data/data.json';
 
 const FilterComponent = () => {
   const [filters, setFilters] = useState({
-    city: "",
-    category: "",
-    type: "",
-    active: "",
+    city: [],
+    category: [],
+    type: [],
+    active: [],
     name: "",
   });
 
@@ -17,10 +17,10 @@ const FilterComponent = () => {
   useEffect(() => {
     const updatedData = data.filter((item) => {
       return (
-        (filters.city === "" || item.city === filters.city) &&
-        (filters.category === "" || item.category === filters.category) &&
-        (filters.type === "" || item.type === filters.type) &&
-        (filters.active === "" || item.active === filters.active) &&
+        (filters.city.length === 0 || filters.city.includes(item.city)) &&
+        (filters.category.length === 0 || filters.category.includes(item.category)) &&
+        (filters.type.length === 0 || filters.type.includes(item.type)) &&
+        (filters.active.length === 0 || filters.active.includes(item.active)) &&
         (filters.name === "" ||
           item.name.toLowerCase().includes(filters.name.toLowerCase()))
       );
@@ -29,7 +29,11 @@ const FilterComponent = () => {
   }, [filters]);
 
   const handleFilterChange = (filterType, value) => {
-    setFilters({ ...filters, [filterType]: value });
+    if (filterType === "active") {
+      setFilters({ ...filters, [filterType]: value });
+    } else {
+      setFilters({ ...filters, [filterType]: value });
+    }
   };
 
   return (
@@ -38,20 +42,27 @@ const FilterComponent = () => {
         <label>
           City:
           <Switch
-            checked={filters.city === "dallas"}
+            checked={filters.city.includes("dallas")}
             onChange={(e) =>
-              handleFilterChange("city", e.target.checked ? "dallas" : "")
+              handleFilterChange(
+                "city",
+                e.target.checked
+                  ? [...filters.city, "dallas"]
+                  : filters.city.filter((city) => city !== "dallas")
+              )
             }
           />
           Dallas
         </label>
         <label>
           <Switch
-            checked={filters.city === "san francisco"}
+            checked={filters.city.includes("san francisco")}
             onChange={(e) =>
               handleFilterChange(
                 "city",
-                e.target.checked ? "san francisco" : ""
+                e.target.checked
+                  ? [...filters.city, "san francisco"]
+                  : filters.city.filter((city) => city !== "san francisco")
               )
             }
           />
@@ -59,9 +70,14 @@ const FilterComponent = () => {
         </label>
         <label>
           <Switch
-            checked={filters.city === "denver"}
+            checked={filters.city.includes("denver")}
             onChange={(e) =>
-              handleFilterChange("city", e.target.checked ? "denver" : "")
+              handleFilterChange(
+                "city",
+                e.target.checked
+                  ? [...filters.city, "denver"]
+                  : filters.city.filter((city) => city !== "denver")
+              )
             }
           />
           Denver
@@ -71,18 +87,28 @@ const FilterComponent = () => {
         <label>
           Category:
           <Switch
-            checked={filters.category === "one"}
+            checked={filters.category.includes("one")}
             onChange={(e) =>
-              handleFilterChange("category", e.target.checked ? "one" : "")
+              handleFilterChange(
+                "category",
+                e.target.checked
+                  ? [...filters.category, "one"]
+                  : filters.category.filter((category) => category !== "one")
+              )
             }
           />
           One
         </label>
         <label>
           <Switch
-            checked={filters.category === "two"}
+            checked={filters.category.includes("two")}
             onChange={(e) =>
-              handleFilterChange("category", e.target.checked ? "two" : "")
+              handleFilterChange(
+                "category",
+                e.target.checked
+                  ? [...filters.category, "two"]
+                  : filters.category.filter((category) => category !== "two")
+              )
             }
           />
           Two
@@ -92,27 +118,42 @@ const FilterComponent = () => {
         <label>
           Type:
           <Switch
-            checked={filters.type === "A"}
+            checked={filters.type.includes("A")}
             onChange={(e) =>
-              handleFilterChange("type", e.target.checked ? "A" : "")
+              handleFilterChange(
+                "type",
+                e.target.checked
+                  ? [...filters.type, "A"]
+                  : filters.type.filter((type) => type !== "A")
+              )
             }
           />
           A
         </label>
         <label>
           <Switch
-            checked={filters.type === "B"}
+            checked={filters.type.includes("B")}
             onChange={(e) =>
-              handleFilterChange("type", e.target.checked ? "B" : "")
+              handleFilterChange(
+                "type",
+                e.target.checked
+                  ? [...filters.type, "B"]
+                  : filters.type.filter((type) => type !== "B")
+              )
             }
           />
           B
         </label>
         <label>
           <Switch
-            checked={filters.type === "C"}
+            checked={filters.type.includes("C")}
             onChange={(e) =>
-              handleFilterChange("type", e.target.checked ? "C" : "")
+              handleFilterChange(
+                "type",
+                e.target.checked
+                  ? [...filters.type, "C"]
+                  : filters.type.filter((type) => type !== "C")
+              )
             }
           />
           C
@@ -122,21 +163,31 @@ const FilterComponent = () => {
         <label>
           Active:
           <Switch
-            checked={filters.active === true}
-            onChange={(e) =>
-              handleFilterChange("active", e.target.checked ? true : "")
+            checked={filters.active.includes("TRUE")}
+            onChange={() =>
+              handleFilterChange(
+                "active",
+                filters.active.includes("TRUE")
+                  ? filters.active.filter((status) => status !== "TRUE")
+                  : [...filters.active, "TRUE"]
+              )
             }
           />
-          True
+          TRUE
         </label>
         <label>
           <Switch
-            checked={filters.active === false}
-            onChange={(e) =>
-              handleFilterChange("active", e.target.checked ? false : "")
+            checked={filters.active.includes('FALSE')}
+            onChange={() =>
+              handleFilterChange(
+                "active",
+                filters.active.includes('FALSE')
+                  ? filters.active.filter((status) => status !== 'FALSE')
+                  : [...filters.active, 'FALSE']
+              )
             }
           />
-          False
+          FALSE
         </label>
       </div>
       <div>
